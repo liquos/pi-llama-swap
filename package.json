@@ -1,0 +1,25 @@
+{
+	"name": "pi-llama-swap",
+	"version": "0.1.0",
+	"description": "Pi provider extension that discovers models from a llama-swap server",
+	"type": "module",
+	"license": "MIT",
+	"author": "Yegor",
+	"keywords": ["pi-package", "pi-extension", "pi", "llama-swap", "llama.cpp", "local-models"],
+	"files": ["index.ts", "README.md", "LICENSE"],
+	"pi": {
+		"extensions": ["./index.ts"]
+	},
+	"peerDependencies": {
+		"@earendil-works/pi-ai": "*",
+		"@earendil-works/pi-coding-agent": "*"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/liquos/pi-llama-swap.git"
+	},
+	"homepage": "https://github.com/liquos/pi-llama-swap#readme",
+	"bugs": {
+		"url": "https://github.com/liquos/pi-llama-swap/issues"
+	}
+}
