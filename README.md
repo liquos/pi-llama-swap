@@ -1,6 +1,6 @@
 # pi-llama-swap
 
-Pi provider extension for [llama-swap](https://github.com/mostlygeek/llama-swap). It reads the model list from a llama-swap server and registers every model with Pi. No model entries in `models.json` are necessary.
+Pi provider extension for [llama-swap](https://github.com/mostlygeek/llama-swap). It reads the model list from a llama-swap server and registers every model with Pi. No model entries are necessary.
 
 ## Install
 
@@ -16,18 +16,55 @@ pi -e git:github.com/liquos/pi-llama-swap
 
 ## Configuration
 
-Set the server address with an environment variable:
+Configure the endpoint in `~/.pi/agent/models.json`:
 
-```bash
-export LLAMA_SWAP_URL=http://127.0.0.1:6969
+```json
+{
+  "providers": {
+    "llama-swap": {
+      "baseUrl": "http://127.0.0.1:6969/v1",
+      "contextWindow": 131072,
+      "maxTokens": 32768
+    }
+  }
+}
 ```
 
-| Variable | Default | Description |
+| Key | Default | Description |
 |---|---|---|
-| `LLAMA_SWAP_URL` | `http://192.168.1.236:6969` | llama-swap base URL. A trailing `/v1` is accepted and removed. |
-| `LLAMA_SWAP_API_KEY` | `local` | API key sent to the server. |
+| `baseUrl` | `http://192.168.1.236:6969/v1` | llama-swap endpoint. A host root or a URL ending in `/v1` is accepted. |
+| `contextWindow` | `128000` | Context window for models that report none. |
+| `maxTokens` | model context window | Output limit for models that report none. A larger value is capped to the context window. |
+| `apiKey` | none | API key. A key in `auth.json` takes precedence. |
 
-Pi shows the models under the provider `llama-swap`. Select one with `/model`.
+Store the key in `~/.pi/agent/auth.json`, or add it with `/login`:
+
+```json
+{
+  "llama-swap": {
+    "type": "api_key",
+    "key": "sk-your-key"
+  }
+}
+```
+
+Environment variables override the file:
+
+| Variable | Description |
+|---|---|
+| `LLAMA_SWAP_URL` | llama-swap endpoint. |
+| `LLAMA_SWAP_API_KEY` | API key. |
+
+Precedence, highest first:
+
+1. `LLAMA_SWAP_URL`, `LLAMA_SWAP_API_KEY`
+2. `auth.json` key
+3. `models.json` `apiKey`
+4. Defaults
+
+Without a key, the extension sends `Bearer llama-swap-local`. An unprotected server ignores it.
+
+Pi shows the models under the provider `llama-swap`. Select one with `/model`. Per-model changes go in `providers["llama-swap"].modelOverrides`; Pi applies them above the discovered models.
 
 ## Model discovery
 
@@ -37,7 +74,7 @@ The extension reads `GET /v1/models` at startup and on provider refresh. It uses
 |---|---|
 | Model ID | `id` |
 | Display name | `name`, then `id` |
-| Context window, max output | `context_length`, `context_window`, `meta.n_ctx` |
+| Context window | `context_length`, `context_window`, `meta.n_ctx`, then the `contextWindow` setting |
 | Image input | `architecture.input_modalities` contains `image`, or `capabilities.vision` |
 | Thinking levels | `meta.llamaswap.reasoning_levels` |
 
