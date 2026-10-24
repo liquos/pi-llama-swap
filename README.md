@@ -96,14 +96,11 @@ The extension maps the Pi levels to these values:
 | Pi level | Sent value |
 |---|---|
 | off | `none` |
-| minimal | not supported unless declared |
 | low | `low` |
 | medium | `medium` |
-| high | `xhigh` |
 | xhigh | `xhigh` |
-| max | `xhigh` |
 
-A level that the metadata does not declare is marked unsupported, and Pi clamps it to the nearest supported level. The value goes in the top-level `reasoning_effort` request field.
+Only levels that the metadata declares are selectable. Any other Pi level is marked unsupported, and Pi clamps it to the nearest supported level. The value goes in the top-level `reasoning_effort` request field.
 
 If `reasoning_levels` is absent, the model is registered without thinking support.
 

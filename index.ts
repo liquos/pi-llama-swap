@@ -131,13 +131,7 @@ function thinkingFrom(declared: string[] | undefined): { reasoning: boolean; map
 	if (supported.size === 0) return { reasoning: false };
 	const map = {} as ThinkingLevelMap;
 	for (const level of PI_LEVELS) {
-		if (supported.has(level)) {
-			map[level] = level === "off" ? "none" : level;
-		} else if ((level === "high" || level === "max") && supported.has("xhigh")) {
-			map[level] = "xhigh";
-		} else {
-			map[level] = null;
-		}
+		map[level] = supported.has(level) ? (level === "off" ? "none" : level) : null;
 	}
 	return { reasoning: true, map };
 }
