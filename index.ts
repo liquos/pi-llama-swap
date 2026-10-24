@@ -155,7 +155,7 @@ function isVision(model: SwapModel): boolean {
 
 function toProviderModel(model: SwapModel, settings: Settings) {
 	const contextWindow = contextWindowOf(model, settings.contextWindow);
-	const maxTokens = Math.min(settings.maxTokens ?? contextWindow, contextWindow);
+	const maxTokens = Math.min(settings.maxTokens ?? Math.floor(contextWindow / 4), contextWindow);
 	const { reasoning, map } = thinkingFrom(model.meta?.llamaswap?.reasoning_levels);
 	return {
 		id: model.id,

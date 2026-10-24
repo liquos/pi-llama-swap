@@ -34,7 +34,7 @@ Configure the endpoint in `~/.pi/agent/models.json`:
 |---|---|---|
 | `baseUrl` | `http://192.168.1.236:6969/v1` | llama-swap endpoint. A host root or a URL ending in `/v1` is accepted. |
 | `contextWindow` | `128000` | Context window for models that report none. |
-| `maxTokens` | model context window | Output limit for models that report none. A larger value is capped to the context window. |
+| `maxTokens` | one quarter of the context window | Output limit. A larger value is capped to the context window. |
 | `apiKey` | none | API key. A key in `auth.json` takes precedence. |
 
 Store the key in `~/.pi/agent/auth.json`, or add it with `/login`:
